@@ -41,27 +41,50 @@ def _init_ollama():
         _ollama_client = ollama.Client(host=OLLAMA_HOST)
     return _ollama_client
 
-def _gemini_answer(prompt: str, model: str = "gemini-2.5-flash", max_retries: int = 3) -> str:
+# Models to try in order — 2.0-flash has the most generous free tier limits
+_GEMINI_MODELS = ["gemini-2.0-flash", "gemini-1.5-flash"]
+
+def _gemini_answer(prompt: str, max_retries: int = 3) -> str:
     api_key = os.getenv("GEMINI_API_KEY") or st.secrets.get("GEMINI_API_KEY")
     if not api_key:
         raise RuntimeError("No Gemini API key found in environment or st.secrets")
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
     headers = {"Content-Type": "application/json"}
     payload = {"contents": [{"parts": [{"text": prompt}]}]}
 
-    for attempt in range(max_retries):
-        resp = requests.post(url, headers=headers, json=payload, timeout=60)
-        if resp.status_code == 429:
-            wait = 2 ** attempt * 5  # 5s, 10s, 20s
-            time.sleep(wait)
+    last_err = None
+    for model in _GEMINI_MODELS:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
+        for attempt in range(max_retries):
+            resp = requests.post(url, headers=headers, json=payload, timeout=60)
+            if resp.status_code == 429:
+                wait = 2 ** attempt * 10  # 10s, 20s, 40s
+                time.sleep(wait)
+                continue
+            if resp.status_code >= 400:
+                last_err = f"{model}: {resp.status_code} {resp.text[:200]}"
+                break  # try next model
+            data = resp.json()
+            candidates = data.get("candidates", [])
+            if candidates:
+                return candidates[0]["content"]["parts"][0]["text"].strip()
+            last_err = f"{model}: empty response"
+            break
+        else:
+            # all retries exhausted for this model (429s), try next
+            last_err = f"{model}: rate limited after {max_retries} retries"
             continue
-        resp.raise_for_status()
-        data = resp.json()
-        return data["candidates"][0]["content"]["parts"][0]["text"].strip()
 
-    raise RuntimeError("Gemini API rate limit exceeded. Please wait a minute and try again.")
+    raise RuntimeError(
+        f"Gemini API failed. Last error: {last_err}. "
+        f"The free tier allows ~15 requests/min. Wait a minute and try again."
+    )
 
+
+@st.cache_resource(show_spinner=False)
+def _load_embedding_model(model_name: str):
+    """Cache the embedding model so it's not reloaded on every Streamlit rerun."""
+    return SentenceTransformer(model_name)
 
 def load_index(store_dir: str = "vector_store"):
     """Load FAISS index + metadata + embedding model."""
@@ -72,7 +95,7 @@ def load_index(store_dir: str = "vector_store"):
         cfg = json.load(f)
 
     emb_model_name = cfg.get("embed_model", EMBED_MODEL)
-    emb = SentenceTransformer(emb_model_name)
+    emb = _load_embedding_model(emb_model_name)
     return index, meta, emb
 
 def retrieve(query: str, index, meta, emb, top_k: int = 5) -> List[dict]:
