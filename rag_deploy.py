@@ -41,18 +41,18 @@ def _init_ollama():
         _ollama_client = ollama.Client(host=OLLAMA_HOST)
     return _ollama_client
 
-# Models to try in order — 2.0-flash has the most generous free tier limits
-_GEMINI_MODELS = ["gemini-2.0-flash", "gemini-1.5-flash"]
+# Models to try in order (gemini-2.5-flash is the current stable model)
+_GEMINI_MODELS = ["gemini-2.5-flash", "gemini-2.0-flash"]
 
 def _gemini_answer(prompt: str, max_retries: int = 3) -> str:
     api_key = os.getenv("GEMINI_API_KEY") or st.secrets.get("GEMINI_API_KEY")
     if not api_key:
-        raise RuntimeError("No Gemini API key found in environment or st.secrets")
+        raise RuntimeError("No Gemini API key found. Add GEMINI_API_KEY in Streamlit secrets.")
 
     headers = {"Content-Type": "application/json"}
     payload = {"contents": [{"parts": [{"text": prompt}]}]}
 
-    last_err = None
+    errors = []
     for model in _GEMINI_MODELS:
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
         for attempt in range(max_retries):
@@ -61,23 +61,24 @@ def _gemini_answer(prompt: str, max_retries: int = 3) -> str:
                 wait = 2 ** attempt * 10  # 10s, 20s, 40s
                 time.sleep(wait)
                 continue
+            if resp.status_code in (401, 403):
+                raise RuntimeError("Invalid or expired API key. Create a new one at aistudio.google.com/apikey")
             if resp.status_code >= 400:
-                last_err = f"{model}: {resp.status_code} {resp.text[:200]}"
+                errors.append(f"{model}: {resp.status_code}")
                 break  # try next model
             data = resp.json()
             candidates = data.get("candidates", [])
             if candidates:
                 return candidates[0]["content"]["parts"][0]["text"].strip()
-            last_err = f"{model}: empty response"
+            errors.append(f"{model}: empty response")
             break
         else:
-            # all retries exhausted for this model (429s), try next
-            last_err = f"{model}: rate limited after {max_retries} retries"
+            errors.append(f"{model}: rate limited after {max_retries} retries")
             continue
 
     raise RuntimeError(
-        f"Gemini API failed. Last error: {last_err}. "
-        f"The free tier allows ~15 requests/min. Wait a minute and try again."
+        f"Gemini API failed ({', '.join(errors)}). "
+        f"Free tier allows ~15 req/min. Wait a minute and try again."
     )
 
 
