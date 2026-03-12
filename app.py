@@ -159,7 +159,13 @@ with st.sidebar:
             saved_paths.append(path)
         st.success(f"{len(saved_paths)} PDF(s) uploaded")
 
-    if st.button("🔨 Build / Refresh Index", use_container_width=True):
+        # Auto-build the index right after upload
+        with st.spinner("Building search index…"):
+            build_index(saved_paths, out_dir="vector_store")
+        st.success("✅ Index ready — you can now ask questions!")
+
+    if st.button("🔨 Rebuild Index", use_container_width=True,
+                 help="Re-index all PDFs in case you uploaded new ones"):
         pdf_dir = "data"
         if not os.path.isdir(pdf_dir):
             st.error("Upload PDFs first.")
@@ -168,9 +174,9 @@ with st.sidebar:
             if not pdfs:
                 st.error("No PDFs found. Upload first.")
             else:
-                with st.spinner("Building FAISS index…"):
+                with st.spinner("Rebuilding FAISS index…"):
                     build_index(pdfs, out_dir="vector_store")
-                st.success("Index ready!")
+                st.success("✅ Index rebuilt!")
 
     st.markdown("---")
     st.markdown(
@@ -224,41 +230,44 @@ with col_btn:
     ask = st.button("🚀 Get Answer", use_container_width=True, type="primary")
 
 # ── Answer ───────────────────────────────────────────────────
+_index_exists = os.path.isfile(os.path.join("vector_store", "faiss.index"))
+
 if ask and query:
-    with st.spinner("Searching documents & generating answer…"):
-        try:
-            answer, hits = rag_query(
-                query,
-                store_dir="vector_store",
-                top_k=top_k,
-                generator=generator,
-            )
+    if not _index_exists:
+        st.warning("⚠️ No index found yet. Upload PDFs in the sidebar first — the index will be built automatically.")
+    else:
+        with st.spinner("Searching documents & generating answer…"):
+            try:
+                answer, hits = rag_query(
+                    query,
+                    store_dir="vector_store",
+                    top_k=top_k,
+                    generator=generator,
+                )
 
-            # Answer card
-            st.markdown(f'<div class="answer-box">{answer}</div>', unsafe_allow_html=True)
+                # Answer card
+                st.markdown(f'<div class="answer-box">{answer}</div>', unsafe_allow_html=True)
 
-            # Source chips
-            sources = list({h["source"] for h in hits})
-            chips = " ".join(f'<span class="source-chip">{s}</span>' for s in sources)
-            st.markdown(f"**Sources:** {chips}", unsafe_allow_html=True)
+                # Source chips
+                sources = list({h["source"] for h in hits})
+                chips = " ".join(f'<span class="source-chip">{s}</span>' for s in sources)
+                st.markdown(f"**Sources:** {chips}", unsafe_allow_html=True)
 
-            # Expandable context
-            with st.expander("📚 View retrieved passages"):
-                for i, h in enumerate(hits):
-                    score_pct = min(h["score"] * 100, 100)
-                    st.markdown(
-                        f'<div class="ctx-block">'
-                        f'<div class="ctx-header">{h["source"]} · chunk {h["chunk"]} · relevance {h["score"]:.3f}</div>'
-                        f'{h["text"]}'
-                        f'<div class="score-bar" style="width:{score_pct}%"></div>'
-                        f'</div>',
-                        unsafe_allow_html=True,
-                    )
+                # Expandable context
+                with st.expander("📚 View retrieved passages"):
+                    for i, h in enumerate(hits):
+                        score_pct = min(h["score"] * 100, 100)
+                        st.markdown(
+                            f'<div class="ctx-block">'
+                            f'<div class="ctx-header">{h["source"]} · chunk {h["chunk"]} · relevance {h["score"]:.3f}</div>'
+                            f'{h["text"]}'
+                            f'<div class="score-bar" style="width:{score_pct}%"></div>'
+                            f'</div>',
+                            unsafe_allow_html=True,
+                        )
 
-        except FileNotFoundError:
-            st.warning("No index found. Upload PDFs and build the index first (see sidebar).")
-        except Exception as e:
-            st.error(f"Something went wrong: {e}")
+            except Exception as e:
+                st.error(f"Something went wrong: {e}")
 
 elif ask and not query:
     st.warning("Please type a question first.")
