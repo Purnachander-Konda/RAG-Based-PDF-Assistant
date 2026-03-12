@@ -1,4 +1,4 @@
-import os, json, pickle
+import os, json, pickle, time
 from typing import List, Tuple
 import faiss
 from sentence_transformers import SentenceTransformer
@@ -41,7 +41,7 @@ def _init_ollama():
         _ollama_client = ollama.Client(host=OLLAMA_HOST)
     return _ollama_client
 
-def _gemini_answer(prompt: str, model: str = "gemini-2.5-flash") -> str:
+def _gemini_answer(prompt: str, model: str = "gemini-2.5-flash", max_retries: int = 3) -> str:
     api_key = os.getenv("GEMINI_API_KEY") or st.secrets.get("GEMINI_API_KEY")
     if not api_key:
         raise RuntimeError("No Gemini API key found in environment or st.secrets")
@@ -50,11 +50,17 @@ def _gemini_answer(prompt: str, model: str = "gemini-2.5-flash") -> str:
     headers = {"Content-Type": "application/json"}
     payload = {"contents": [{"parts": [{"text": prompt}]}]}
 
-    resp = requests.post(url, headers=headers, json=payload, timeout=60)
-    resp.raise_for_status()
-    data = resp.json()
+    for attempt in range(max_retries):
+        resp = requests.post(url, headers=headers, json=payload, timeout=60)
+        if resp.status_code == 429:
+            wait = 2 ** attempt * 5  # 5s, 10s, 20s
+            time.sleep(wait)
+            continue
+        resp.raise_for_status()
+        data = resp.json()
+        return data["candidates"][0]["content"]["parts"][0]["text"].strip()
 
-    return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+    raise RuntimeError("Gemini API rate limit exceeded. Please wait a minute and try again.")
 
 
 def load_index(store_dir: str = "vector_store"):
