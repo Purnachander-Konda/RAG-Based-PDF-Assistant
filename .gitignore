@@ -1,0 +1,19 @@
+# Secrets
+.env
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Data & indexes (user-generated at runtime)
+data/
+vector_store/
+benchmarks/
+
+# IDE
+.vscode/
+.idea/

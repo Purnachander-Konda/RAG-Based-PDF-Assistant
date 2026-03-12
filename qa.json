@@ -1,0 +1,412 @@
+[
+  {
+    "question": "What mechanism replaces recurrence in the Transformer paper?",
+    "expected_substring": "self-attention"
+  },
+  {
+    "question": "What improves parallelization in the Transformer architecture?",
+    "expected_substring": "positional encoding"
+  },
+  {
+    "question": "What is the title of the Transformer paper?",
+    "expected_substring": "Attention Is All You Need"
+  },
+  {
+    "question": "Which dataset did the Transformer evaluate on for translation?",
+    "expected_substring": "WMT"
+  },
+  {
+    "question": "What optimizer did the Transformer paper use?",
+    "expected_substring": "Adam"
+  },
+  {
+    "question": "How many encoder layers are in the original Transformer?",
+    "expected_substring": "6"
+  },
+  {
+    "question": "What is the dimensionality of the Transformer hidden layer?",
+    "expected_substring": "512"
+  },
+  {
+    "question": "What is the dimensionality of Transformer feedforward layers?",
+    "expected_substring": "2048"
+  },
+  {
+    "question": "What mechanism allows the Transformer to scale linearly with sequence length?",
+    "expected_substring": "multi-head"
+  },
+  {
+    "question": "Who are the first authors of the Transformer paper?",
+    "expected_substring": "Vaswani"
+  },
+
+  {
+    "question": "What pretraining objective does BERT introduce?",
+    "expected_substring": "masked language modeling"
+  },
+  {
+    "question": "What auxiliary task was used in BERT pretraining?",
+    "expected_substring": "next sentence prediction"
+  },
+  {
+    "question": "Who introduced BERT?",
+    "expected_substring": "Devlin"
+  },
+  {
+    "question": "What dataset was BERT pretrained on?",
+    "expected_substring": "BookCorpus"
+  },
+  {
+    "question": "What does BERT stand for?",
+    "expected_substring": "Bidirectional Encoder Representations from Transformers"
+  },
+  {
+    "question": "What is the size of BERT-Large?",
+    "expected_substring": "340 million"
+  },
+  {
+    "question": "What maximum input length did BERT handle?",
+    "expected_substring": "512"
+  },
+  {
+    "question": "What fine-tuning tasks was BERT evaluated on?",
+    "expected_substring": "SQuAD"
+  },
+  {
+    "question": "Which masking percentage was used in BERT?",
+    "expected_substring": "15%"
+  },
+  {
+    "question": "What improvement did BERT bring to GLUE benchmark?",
+    "expected_substring": "state-of-the-art"
+  },
+
+  {
+    "question": "What scale of parameters did GPT-3 reach?",
+    "expected_substring": "175 billion"
+  },
+  {
+    "question": "What learning approach did GPT-3 highlight?",
+    "expected_substring": "few-shot"
+  },
+  {
+    "question": "What benchmark was GPT-3 evaluated on?",
+    "expected_substring": "SuperGLUE"
+  },
+  {
+    "question": "What type of neural network is GPT-3 based on?",
+    "expected_substring": "transformer"
+  },
+  {
+    "question": "What dataset size did GPT-3 train on?",
+    "expected_substring": "300 billion"
+  },
+  {
+    "question": "What smaller-scale models were compared to GPT-3?",
+    "expected_substring": "GPT-2"
+  },
+  {
+    "question": "What API was later created from GPT-3?",
+    "expected_substring": "OpenAI API"
+  },
+  {
+    "question": "What limitation of GPT-3 was noted?",
+    "expected_substring": "bias"
+  },
+  {
+    "question": "What architecture depth was GPT-3’s largest model?",
+    "expected_substring": "96 layers"
+  },
+  {
+    "question": "What optimizer did GPT-3 use?",
+    "expected_substring": "Adam"
+  },
+
+  {
+    "question": "What kind of relationship between compute and performance is shown in the Scaling Laws paper?",
+    "expected_substring": "power law"
+  },
+  {
+    "question": "Which three factors were studied in Scaling Laws?",
+    "expected_substring": "model size"
+  },
+  {
+    "question": "Who authored the Scaling Laws paper?",
+    "expected_substring": "Kaplan"
+  },
+  {
+    "question": "What year was the Scaling Laws paper published?",
+    "expected_substring": "2020"
+  },
+  {
+    "question": "What metric was used to measure performance in Scaling Laws?",
+    "expected_substring": "cross-entropy loss"
+  },
+  {
+    "question": "What does the Scaling Laws paper suggest about optimal compute usage?",
+    "expected_substring": "balanced"
+  },
+  {
+    "question": "What did the Scaling Laws paper predict about future models?",
+    "expected_substring": "larger"
+  },
+  {
+    "question": "What training strategy does scaling laws impact?",
+    "expected_substring": "early stopping"
+  },
+  {
+    "question": "What efficiency problem does Scaling Laws highlight?",
+    "expected_substring": "underfitting"
+  },
+  {
+    "question": "Which field does Scaling Laws most influence?",
+    "expected_substring": "language modeling"
+  },
+
+  {
+    "question": "What alignment technique was introduced in the InstructGPT paper?",
+    "expected_substring": "reinforcement learning from human feedback"
+  },
+  {
+    "question": "What human signal was used in InstructGPT?",
+    "expected_substring": "preferences"
+  },
+  {
+    "question": "What base model was aligned in InstructGPT?",
+    "expected_substring": "GPT-3"
+  },
+  {
+    "question": "What metric showed improvement in InstructGPT?",
+    "expected_substring": "truthfulness"
+  },
+  {
+    "question": "What year was InstructGPT released?",
+    "expected_substring": "2022"
+  },
+  {
+    "question": "What reinforcement method was applied in InstructGPT?",
+    "expected_substring": "policy optimization"
+  },
+  {
+    "question": "What main risk was mitigated by InstructGPT?",
+    "expected_substring": "harmful outputs"
+  },
+  {
+    "question": "How many annotators were used in InstructGPT?",
+    "expected_substring": "40"
+  },
+  {
+    "question": "What technique was used to fine-tune models before RLHF?",
+    "expected_substring": "supervised"
+  },
+  {
+    "question": "What downstream tasks improved with InstructGPT?",
+    "expected_substring": "question answering"
+  },
+
+  {
+    "question": "What was one motivation behind LLaMA?",
+    "expected_substring": "efficient"
+  },
+  {
+    "question": "What year was the LLaMA paper released?",
+    "expected_substring": "2023"
+  },
+  {
+    "question": "Who released the LLaMA model?",
+    "expected_substring": "Meta"
+  },
+  {
+    "question": "What training dataset size did LLaMA use?",
+    "expected_substring": "1.4 trillion tokens"
+  },
+  {
+    "question": "What parameter size did the largest LLaMA model have?",
+    "expected_substring": "65 billion"
+  },
+  {
+    "question": "What tokenizer does LLaMA use?",
+    "expected_substring": "SentencePiece"
+  },
+  {
+    "question": "What was the smallest LLaMA model size?",
+    "expected_substring": "7 billion"
+  },
+  {
+    "question": "What tasks did LLaMA outperform GPT-3 on?",
+    "expected_substring": "commonsense"
+  },
+  {
+    "question": "What architecture does LLaMA build on?",
+    "expected_substring": "transformer"
+  },
+  {
+    "question": "What open-source community adopted LLaMA?",
+    "expected_substring": "Hugging Face"
+  },
+
+  {
+    "question": "What type of diffusion model does Stable Diffusion use?",
+    "expected_substring": "latent"
+  },
+  {
+    "question": "Which model family inspired Stable Diffusion?",
+    "expected_substring": "autoencoder"
+  },
+  {
+    "question": "What dataset was Stable Diffusion trained on?",
+    "expected_substring": "LAION"
+  },
+  {
+    "question": "What image resolution does Stable Diffusion generate?",
+    "expected_substring": "512"
+  },
+  {
+    "question": "What sampling method does Stable Diffusion use?",
+    "expected_substring": "DDIM"
+  },
+  {
+    "question": "What year was the Stable Diffusion paper published?",
+    "expected_substring": "2021"
+  },
+  {
+    "question": "What training approach reduces compute in Stable Diffusion?",
+    "expected_substring": "latent space"
+  },
+  {
+    "question": "Who authored the Stable Diffusion paper?",
+    "expected_substring": "Rombach"
+  },
+  {
+    "question": "What is one key advantage of Stable Diffusion?",
+    "expected_substring": "memory efficient"
+  },
+  {
+    "question": "What open-source community adopted Stable Diffusion?",
+    "expected_substring": "Stability AI"
+  },
+
+
+  {
+    "question": "What process does DDPM reverse?",
+    "expected_substring": "Markov"
+  },
+  {
+    "question": "What key method stabilizes DDPM training?",
+    "expected_substring": "variance"
+  },
+  {
+    "question": "Who proposed DDPM?",
+    "expected_substring": "Ho"
+  },
+  {
+    "question": "What year was DDPM introduced?",
+    "expected_substring": "2020"
+  },
+  {
+    "question": "What dataset was DDPM tested on?",
+    "expected_substring": "CIFAR-10"
+  },
+  {
+    "question": "What loss function was used in DDPM training?",
+    "expected_substring": "variational"
+  },
+  {
+    "question": "What noise schedule did DDPM introduce?",
+    "expected_substring": "linear"
+  },
+  {
+    "question": "What is the generative process length in DDPM?",
+    "expected_substring": "1000"
+  },
+  {
+    "question": "What application does DDPM excel at?",
+    "expected_substring": "image generation"
+  },
+  {
+    "question": "What inspired DDPM models?",
+    "expected_substring": "score matching"
+  },
+
+  {
+    "question": "What task does the Segment Anything model address?",
+    "expected_substring": "segmentation"
+  },
+  {
+    "question": "What unique feature does SAM provide for masks?",
+    "expected_substring": "promptable"
+  },
+  {
+    "question": "Who introduced the Segment Anything model?",
+    "expected_substring": "Meta"
+  },
+  {
+    "question": "What year was the SAM paper released?",
+    "expected_substring": "2023"
+  },
+  {
+    "question": "What dataset was created for SAM?",
+    "expected_substring": "SA-1B"
+  },
+  {
+    "question": "What architecture backbone was used in SAM?",
+    "expected_substring": "Vision Transformer"
+  },
+  {
+    "question": "What is a key application of SAM?",
+    "expected_substring": "image editing"
+  },
+  {
+    "question": "What is the size of the dataset SAM trained on?",
+    "expected_substring": "11 million images"
+  },
+  {
+    "question": "What benchmark tasks did SAM outperform on?",
+    "expected_substring": "segmentation"
+  },
+  {
+    "question": "What is one limitation of SAM?",
+    "expected_substring": "oversegmentation"
+  },
+
+  {
+    "question": "What two components are combined in the RAG approach?",
+    "expected_substring": "retrieval"
+  },
+  {
+    "question": "What dataset was RAG tested on?",
+    "expected_substring": "Natural Questions"
+  },
+  {
+    "question": "Who authored the RAG paper?",
+    "expected_substring": "Lewis"
+  },
+  {
+    "question": "What year was RAG introduced?",
+    "expected_substring": "2020"
+  },
+  {
+    "question": "What retriever model was used in RAG?",
+    "expected_substring": "DPR"
+  },
+  {
+    "question": "What generation model was used in RAG?",
+    "expected_substring": "BART"
+  },
+  {
+    "question": "What benchmark did RAG improve performance on?",
+    "expected_substring": "TriviaQA"
+  },
+  {
+    "question": "What application domain is RAG best suited for?",
+    "expected_substring": "knowledge-intensive"
+  },
+  {
+    "question": "What tradeoff does RAG balance?",
+    "expected_substring": "retrieval and generation"
+  },
+  {
+    "question": "What open-source framework implemented RAG?",
+    "expected_substring": "Hugging Face"
+  }
+]
