@@ -28,7 +28,7 @@ In short: RAG makes LLMs **more accurate, up-to-date, and customizable** to your
 
 ---
 
-## 📖 Project Explanation  
+## 📖 Project Explanation 
 
 This project is a **PDF-based AI research assistant**.  
 You upload PDFs (e.g., research papers, policies, technical docs), and the chatbot:  
